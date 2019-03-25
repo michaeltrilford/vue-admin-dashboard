@@ -1,41 +1,94 @@
 <template>
-  <div class="container">
-    <p class="request">
-      Don't have a Design+HQ account?
-      <router-link to="/request">Request an account</router-link>
-    </p>
+  <div
+    class="container"
+    :class="{'light-background' : !isDarkMode, 'dark-background' :  isDarkMode }"
+  >
+    <RequestAccount/>
     <div class="login">
-      <img src="@/assets/DCHQ-dark.svg" alt>
-      <h4>Sign into Design+Code HQ</h4>
-      <input type="email" placeholder="Email">
-      <input type="password" placeholder="Password">
-      <button>Sign in</button>
-      <router-link to="/recover">Forgot your password?</router-link>
+      <img src="@/assets/DCHQ.svg" v-show="isDarkMode">
+      <img src="@/assets/DCHQ-dark.svg" v-show="!isDarkMode">
+      <h4 :class="{'light-text' : isDarkMode, 'dark-text' : !isDarkMode}">Sign into Design+Code HQ</h4>
+      <input
+        :class="{'light-field' : isDarkMode, 'dark-field' : !isDarkMode}"
+        type="email"
+        placeholder="Email"
+      >
+      <input
+        :class="{'light-field' : isDarkMode, 'dark-field' : !isDarkMode}"
+        type="password"
+        placeholder="Password"
+      >
+      <button :class="{'dark-button' : isDarkMode, 'light-button' : !isDarkMode}">Sign in</button>
+      <router-link
+        :class="{'light-link' : !isDarkMode, 'dark-link' :  isDarkMode }"
+        to="/recover"
+      >Forgot your password?</router-link>
+      <button
+        :class="{'dark-button' : isDarkMode, 'light-button' : !isDarkMode}"
+        @click="toggleDarkMode"
+      >Toggle</button>
     </div>
   </div>
 </template>
 
 <script>
+import RequestAccount from "@/components/RequestAccount";
+
 export default {
-  name: "SignIn"
+  name: "SignIn",
+  components: {
+    RequestAccount
+  },
+  computed: {
+    isDarkMode() {
+      return this.$store.getters.isDarkMode;
+    }
+  },
+  methods: {
+    toggleDarkMode() {
+      this.$store.commit("toggleDarkMode");
+    }
+  }
 };
 </script>
 
 <style scoped lang="sass">
+
+  .light-background
+    background-color: $light-gray
+
+  .dark-background
+    background-color: $dark-blue 
+
+  .light-text
+    color: $white
+
+  .dark-text
+    color: $black
+
+  .light-field
+    background: rgba(255,255,255,0.2)
+    border: 1px solid rgba(255,255,255,0.2)
+    &::placeholder
+      color: rgba(255,255,255,0.3)
+
+  .dark-field
+    background: rgba(198,208,235,0.2)
+    border: 1px solid rgba(0,0,0,0.2)
+    &::placeholder
+      color: rgba(0,0,0,0.3)
+
+  .light-link
+    color: rgba(0, 0, 0, 0.3)
+
+  .dark-link
+    color: rgba(255, 255, 255, 0.3)
+
   .container
     display: flex
     justify-content: center
     align-items: center
     min-height: 100vh
-
-  .request
-    margin: 0
-    position: absolute
-    top: 24px
-    right: 24px
-    color: rgba(255, 255, 255, 0.3)
-    a
-      color: white
 
   .login
     width: 400px
@@ -62,8 +115,6 @@ export default {
       color: rgba(255, 255, 255, 0.3)
 
   button
-    background: #56CCF2
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2)
     border-radius: 4px
     height: 60px
     width: 100%
@@ -72,10 +123,20 @@ export default {
     border: none
     margin-bottom: 40px
 
+  .light-button
+    background: #2470f5
+    color: $white
+    box-shadow: 0px 0px 20px rgba(#2470f5, 0.2)
+
+  .dark-button
+    background: #56CCF2
+    color: $dark-blue
+    box-shadow: 0px 0px 20px rgba($dark-blue, 0.2)
+
+
   a
     line-height: 25px
     text-align: center
-    color: rgba(255, 255, 255, 0.3)
     text-decoration: none
 
 </style>
